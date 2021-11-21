@@ -308,48 +308,88 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.moveEgg()
         })
         
+        // 画面のアスペクト比を計算
+        let aspectRatio = UIScreen.main.bounds.width / UIScreen.main.bounds.height
+        
+        // 画面のアスペクト比によってオブジェクト位置を調整
+        var adjRatio:CGFloat = 0
+        var adjWidth:CGFloat = 0
+        var adjHeight:CGFloat = 0
+        if (0.5 < aspectRatio){
+            // When iPhone6s
+            adjRatio = 0
+            adjWidth = 0
+            adjHeight = -125
+        }
+        else {
+            // Otherwise
+            adjRatio = 1
+            adjWidth = -20
+            adjHeight = -135
+        }
+        
         // ライフの作成
         let loopAnimation = SKAction.repeatForever(self.lifeAnimation)
         self.life1 = SKSpriteNode(imageNamed:"Mihochan0-1")
         self.life1.scale(to: lifeSize)
         self.life1.run(loopAnimation)
         self.life1.zPosition = 2
-        self.life1.position = CGPoint(x: -frame.width / 2 + 70, y: frame.height / 2 - 125)
+        self.life1.position = CGPoint(x: -frame.width / 2 + 70 * (1 + adjRatio) + adjWidth, y: frame.height / 2 + adjHeight)
         addChild(self.life1)
         
         self.life2 = SKSpriteNode(imageNamed:"Mihochan0-1")
         self.life2.scale(to: lifeSize)
         self.life2.run(loopAnimation)
         self.life2.zPosition = 2
-        self.life2.position = CGPoint(x: -frame.width / 2 + 140, y: frame.height / 2 - 125)
+        self.life2.position = CGPoint(x: -frame.width / 2 + 70 * (2 + adjRatio) + adjWidth, y: frame.height / 2 + adjHeight)
         addChild(self.life2)
         
         self.life3 = SKSpriteNode(imageNamed:"Mihochan0-1")
         self.life3.scale(to: lifeSize)
         self.life3.run(loopAnimation)
         self.life3.zPosition = 2
-        self.life3.position = CGPoint(x: -frame.width / 2 + 210, y: frame.height / 2 - 125)
+        self.life3.position = CGPoint(x: -frame.width / 2 + 70 * (3 + adjRatio) + adjWidth, y: frame.height / 2 + adjHeight)
         addChild(self.life3)
         
         self.life4 = SKSpriteNode(imageNamed:"Mihochan0-1")
         self.life4.scale(to: lifeSize)
         self.life4.run(loopAnimation)
         self.life4.zPosition = 2
-        self.life4.position = CGPoint(x: -frame.width / 2 + 280, y: frame.height / 2 - 125)
+        self.life4.position = CGPoint(x: -frame.width / 2 + 70 * (4 + adjRatio) + adjWidth, y: frame.height / 2 + adjHeight)
         addChild(self.life4)
 
         self.life = 3
         updateLife()
         
+        // 画面のアスペクト比によってオブジェクト位置を調整
+        var fontSize:CGFloat = 0
+        var adjScoreHeight:CGFloat = 0
+        var scoreWidth:CGFloat = 0
+        var hiScoreWidth:CGFloat = 0
+        if (0.5 < aspectRatio){
+            // When iPhone6s
+            fontSize = 37
+            adjScoreHeight = 0
+            scoreWidth = -frame.width / 2 + 35
+            hiScoreWidth = frame.width / 2 - 35
+        }
+        else {
+            // Otherwise
+            fontSize = 30
+            adjScoreHeight = -30
+            scoreWidth = -frame.width / 2 + 82
+            hiScoreWidth = frame.width / 2 - 85
+        }
+        
         // スコアの表示
         self.score = 0
         self.scoreLabelNode.fontName = "HelveticaNeue-Bold"
         self.scoreLabelNode.fontColor = UIColor.white
-        self.scoreLabelNode.fontSize = 37
+        self.scoreLabelNode.fontSize = fontSize
         self.scoreLabelNode.horizontalAlignmentMode = .left
         self.scoreLabelNode.position = CGPoint(
-            x: -frame.width / 2 + 35,
-            y: frame.height / 2 - self.scoreLabelNode.frame.height * 2.5)
+            x: scoreWidth,
+            y: frame.height / 2 - self.scoreLabelNode.frame.height * 2.5 + adjScoreHeight)
         self.scoreLabelNode.zPosition = 2
         addChild(self.scoreLabelNode)
         
@@ -357,14 +397,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.highScore = 0
         self.highScoreLabelNode.fontName = "HelveticaNeue-Bold"
         self.highScoreLabelNode.fontColor = UIColor.white
-        self.highScoreLabelNode.fontSize = 37
+        self.highScoreLabelNode.fontSize = fontSize
         self.highScoreLabelNode.horizontalAlignmentMode = .right
         self.highScoreLabelNode.position = CGPoint(
-            x: frame.width / 2 - 35,
-            y: frame.height / 2 - self.highScoreLabelNode.frame.height * 2.5)
+            x: hiScoreWidth,
+            y: frame.height / 2 - self.highScoreLabelNode.frame.height * 2.5 + adjScoreHeight)
         self.highScoreLabelNode.zPosition = 2
         addChild(self.highScoreLabelNode)
-        
+
         self.defaults.register(defaults:["highScores":[10,11,12]])
         let highScores = self.defaults.object(forKey: "highScores") as! [Int]
         self.highScore = highScores[0]

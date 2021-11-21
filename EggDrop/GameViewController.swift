@@ -4,6 +4,9 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    var topSafeAreaHeight: CGFloat = 0
+    var bottomSafeAreaHeight: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -15,9 +18,16 @@ class GameViewController: UIViewController {
             }
             
             view.ignoresSiblingOrder = true
-            view.showsFPS = true
-            view.showsNodeCount = true
+            view.showsFPS = false
+            view.showsNodeCount = false
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // ToDo 画面のオブジェクトの位置調整に反映する
+        topSafeAreaHeight = self.view.safeAreaInsets.top
+        bottomSafeAreaHeight = self.view.safeAreaInsets.bottom
     }
     
     override var shouldAutorotate: Bool {
